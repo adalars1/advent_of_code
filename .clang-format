@@ -1,0 +1,12 @@
+---
+BasedOnStyle: Google
+AllowShortBlocksOnASingleLine: 'false'
+AllowShortIfStatementsOnASingleLine: Always
+BreakBeforeBraces: Stroustrup
+Cpp11BracedListStyle: 'false'
+IndentWidth: '2'
+Language: Cpp
+TabWidth: '2'
+UseTab: Never
+LineEnding: LF
+...
