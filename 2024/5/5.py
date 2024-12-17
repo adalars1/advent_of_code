@@ -1,5 +1,4 @@
 
-import re
 from math import floor
 
 
@@ -32,7 +31,6 @@ with open("./input", "r", encoding="utf-8") as data:
   for line in data:
     line = line.strip() # remove whitespaces
     if "|" in line: # rule line
-      #print("order line: " + line)
       key, after_list = line.split("|") 
       if key in order_rules.keys():
         order_rules[key].append(after_list)
