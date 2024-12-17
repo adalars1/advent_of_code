@@ -7,11 +7,6 @@
 
 int main(int argc, char* argv[])
 {
-  //std::cout << "argc: " << argc << std::endl;
-
-  for (int i = 0; i < argc; i++) {
-    //std::cout << "argv[" << i << "]: " << argv[i] << std::endl;
-  }
 
   std::ifstream file("input");
   std::string line;
@@ -26,7 +21,6 @@ int main(int argc, char* argv[])
   }
 
   while (file >> num1 >> num2) {
-    // std::cout << "num1: " << num1 << " num2: " << num2 << std::endl;
     nums_1.push_back(std::stoi(num1));
     nums_2.push_back(std::stoi(num2));
   }
