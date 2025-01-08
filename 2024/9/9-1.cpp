@@ -19,12 +19,6 @@ struct Block {
 bool is_compacted(std::vector<Block>& v)
 {
   for (size_t i = 0; i < v.size(); i++) {
-    // if (0 < i == i < v.size()) {
-    //   if ((v.at(i - 1).type == File) && (v.at(i).type == Space) &&
-    //       (v.at(i + 1).type == File)) {
-    //     return false;
-    //   }
-    // }
     if (0 < i) {
       if ((v.at(i - 1).type == Space) && (v.at(i).type == File)) {
         return false;
@@ -65,7 +59,6 @@ int main(/*int argc, char* argv[]*/)
         new_file.type = File;
         new_file.file_id = file_id;
         new_file.text.append(std::to_string(file_id));
-        // blocks.push_back(std::to_string(pos));
         blocks.push_back(new_file);
       }
       file_id++;
@@ -75,7 +68,6 @@ int main(/*int argc, char* argv[]*/)
         Block new_space;
         new_space.type = Space;
         new_space.text.append(".");
-        // blocks.push_back(".");
         blocks.push_back(new_space);
       }
     }
@@ -89,8 +81,6 @@ int main(/*int argc, char* argv[]*/)
     auto last_file_it =
         std::find_if(blocks.rbegin(), blocks.rend(),
                      [](const Block& rhs) { return rhs.type == File; });
-    //    std::cout << "last_file_it->text: " << last_file_it->text <<
-    //    std::endl;
 
     std::iter_swap(last_file_it, first_space_it);
   }
