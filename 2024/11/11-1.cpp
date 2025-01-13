@@ -1,15 +1,16 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
+#include <list>
 #include <ostream>
 #include <string>
 #include <vector>
 
 typedef long long Stone;
 
-static std::vector<Stone> blink(std::vector<Stone>& stones_in)
+static std::list<Stone> blink(std::list<Stone>& stones_in)
 {
-  std::vector<Stone> new_stones;
+  std::list<Stone> new_stones;
   for (auto it = stones_in.begin(); it != stones_in.end(); it++) {
     // If the stone is engraved with the number 0, it is replaced by a stone
     // engraved with the number 1.
@@ -52,7 +53,7 @@ int main(/*int argc, char* argv[]*/)
     return -1;
   }
 
-  static std::vector<Stone> stones;
+  static std::list<Stone> stones;
   std::string line;
   while (file_input >> line) {
     Stone new_stone{ std::stoi(line) };
@@ -66,7 +67,7 @@ int main(/*int argc, char* argv[]*/)
   }
   std::cerr << "\n";
 
-  std::vector<Stone> cur_stones = stones;
+  std::list<Stone> cur_stones = stones;
   for (int i = 0; i < 25; i++) {
     std::cerr << "Blink " << i + 1
               << ", cur_stones.size(): " << cur_stones.size() << "\n";
