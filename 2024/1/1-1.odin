@@ -19,7 +19,7 @@ import "core:strings"
 
 main :: proc() {
 
-	// öppna filen input
+  	// öppna filen input
 	// läs innehållet
 	// skriv ut innehållet
 
@@ -53,6 +53,12 @@ main :: proc() {
 	slice.sort(left_values[:])
 	slice.sort(right_values[:])
 
+  solve_1(left_values, right_values)
+  solve_2(left_values, right_values)
+}
+
+
+solve_1 :: proc(left_values: [dynamic]int, right_values: [dynamic]int) {
 	sum_distances := 0
 	for cur, index in left_values {
 		distance := cur - right_values[index]
@@ -64,4 +70,22 @@ main :: proc() {
 
 	fmt.println("Sum_distances: ", sum_distances)
 
+}
+
+
+solve_2 :: proc(left_values: [dynamic]int, right_values: [dynamic]int) {
+
+similarity_score := 0
+
+for to_find in left_values{
+  times_found := 0
+  for right in right_values {
+    if right == to_find {
+      times_found += 1
+    }
+  }
+  similarity_score += times_found * to_find
+}
+
+fmt.println("Similarity_score: ", similarity_score)
 }
