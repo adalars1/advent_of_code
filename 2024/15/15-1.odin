@@ -7,9 +7,7 @@ import "core:unicode/utf8"
 
 import "core:testing"
 
-
-
-
+// swap places of two runes in a 2D-array
 swap_char :: proc(grid: ^[][]rune, x1: int, y1: int, x2: int, y2: int) {
 	tmp := grid[y1][x1]
 	grid[y1][x1] = grid[y2][x2]
@@ -28,25 +26,25 @@ if len(arguments) != 1 {
 	log.panic("Usage: ./<program> <input_file> ")
 }
 
-	// Öppna filen
+	// Open the file
 	file_path := os.args[1]
 	data, success := os.read_entire_file(file_path)
 	if !success {
 		log.infof("Failed to open file '%s', exiting.\n", file_path)
 		os.exit(1)
 	}
-	defer delete(data) // Frigör minnet när vi är klara
+	defer delete(data) // Free memory when we are done
 
-	// Konvertera byte-data till string
+	// Convert byte-data to string
 	content := string(data)
-	// Räkna rader för att bestämma arrayens storlek
+	// Count row to determine grid array size
 	lines := strings.split_lines(content)
 	defer delete(lines)
 	if len(lines) == 0 {
 		log.panic("File is empty!")
 	}
 
-	// Hitta längden på längsta raden
+	// Find length of the longest row
 	max_width := 0
 	max_height := 0
 	for line in lines {
@@ -62,11 +60,7 @@ if len(arguments) != 1 {
 	}
  
 
-	// Skapa 2D-array (slice av slices)
-	// height := len(lines)
-	// if height > max_height {
-	// 	max_height = height
-	// }
+	// Create 2D-array (slice of slices)
 	grid := make([][]rune, max_height)
 	defer {
 		for row in grid {
@@ -75,7 +69,7 @@ if len(arguments) != 1 {
 		delete(grid)
 	}
 
-	// Fyll arrayen med runor (UTF-8 tecken)
+	// Fill the array with runes (UTF-8 tecken)
 	robot_posx_start := 0
 	robot_posy_start := 0
 	moves : [dynamic]rune
@@ -108,14 +102,8 @@ if len(arguments) != 1 {
 		}
 	
 	}
-		// Fyll resterande positioner med mellanslag om raden är kortare
-		// for j := len(runes); j < max_width; j += 1 {
-		// 	grid[i][j] = ' '
-		// }
 
-	
-
-	// Exempel: Skriv ut arrayen
+	// Print the array resulting from the file
 	log.infof("Starting grid:")
 	for row in grid {
 		row_arr : [dynamic]rune
