@@ -166,20 +166,15 @@ solve_1 :: proc(grid: ^[][]rune, moves: [dynamic]rune,
 			}
 			else if grid[robot_posy][right] == 'O' {
 				// check if there is a space somewhere behind the O
-				log.info("right: ", right, " robot_pos_x: ", robot_posx, " robot_pos_y: ", robot_posy)
-				log.info("max_width: ", max_width, " max_height: ", max_height)
 				for rightmost_empty_idx := right + 1;
 				rightmost_empty_idx < max_width;
 				rightmost_empty_idx += 1 {
-					log.info("rightmost_empty_idx: ", rightmost_empty_idx)
 					if grid[robot_posy][rightmost_empty_idx] == '#' {
 						// we found a wall, abort search
-						log.info("found wall at col: ", rightmost_empty_idx)
 						break
 					}
 					else if grid[robot_posy][rightmost_empty_idx] == '.' {
 						// go back to robot position and move all barrels to the right
-						log.info("found a space at col: ", rightmost_empty_idx)
 						for cur := rightmost_empty_idx; cur > robot_posx; cur -= 1 {
 							log.info("Swapping: cur: ", cur, " robot_pos_y: ", robot_posy, " with cur - 1: ", cur - 1, ", robot_pos_y: ", robot_posy)
 							swap_char(grid, cur, robot_posy, cur - 1, robot_posy)
@@ -254,6 +249,15 @@ solve_1 :: proc(grid: ^[][]rune, moves: [dynamic]rune,
 		
 	}
 
+	sum_gps_coordinates := 0
+	for row, row_i in grid {
+		for char, char_i in row {
+			if char == 'O' {
+		 		sum_gps_coordinates += ((row_i * 100) + char_i)
+			}
+		}
+	}
+	log.info("Sum of all boxes GPS coordinates is ", sum_gps_coordinates)
 }
 
 
