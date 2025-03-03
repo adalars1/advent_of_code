@@ -1,4 +1,4 @@
-package aoc_2024_16_1
+package aoc_2024_17
 
 import "core:fmt"
 import "core:log"
@@ -101,7 +101,7 @@ main :: proc() {
 		n_rows = 71
 		end_node.x = 70
 		end_node.y = 70
-		max_steps = 1024
+		max_steps = 99999
 	}
 
 
@@ -125,7 +125,7 @@ main :: proc() {
 	steps_taken := 0
 	steps : [dynamic]pos
 	for line in lines {
-		if len(line) > 0 && steps_taken < max_steps{
+		if len(line) > 0 {
 			// Parse the line
 			x := strconv.atoi(strings.split(line, ",")[0])
 			y := strconv.atoi(strings.split(line, ",")[1])
@@ -134,7 +134,8 @@ main :: proc() {
 		}
 	}
 
-	
+	max_steps = len(steps)
+
 	// Create 2D-array (slice of slices)
 	grid := make([][]rune, n_rows)
 	defer {
@@ -152,38 +153,36 @@ main :: proc() {
 		}
 	}
 	
-	// Print the array resulting from the file
-	log.infof("Starting grid:")
-	for row in grid {
-		row_arr: [dynamic]rune
-		defer delete(row_arr)
-		for char in row {
-			append(&row_arr, char)
-		}
-		log.infof("%s", row_arr)
-	}
-	
-
-	for step in steps {
-		grid[step.y][step.x] = '#'
-	}
-
-	log.infof("Blocked grid:")
-	for row in grid {
-		row_arr: [dynamic]rune
-		defer delete(row_arr)
-		for char in row {
-			append(&row_arr, char)
-		}
-		log.infof("%s", row_arr)
-	}
-
-	solve_1(&grid, n_columns, n_rows, start_node, end_node)
-	
+	solve_1(steps[:1024], &grid, n_columns, n_rows, start_node, end_node)
+	solve_2(&steps, &grid, n_columns, n_rows, start_node, end_node)
 }
 
 
-solve_1 :: proc(grid: ^[][]rune, n_columns: int, n_rows: int, start_node: pos, end_node: pos) {
+solve_1 :: proc(steps : []pos, grid: ^[][]rune, n_columns: int, n_rows: int, start_node: pos, end_node: pos) {
+	for step in steps {
+		grid[step.y][step.x] = '#'
+	}
+	exit_reached, moves := bfs_path_search(grid, n_columns, n_rows, start_node, end_node)
+	if exit_reached {
+		log.infof("Part 1: Found exit after %i moves", moves)
+	} else {
+		log.infof("Part 1: Failed to reach exit!")
+	}
+}
+
+
+solve_2 :: proc(steps : ^[dynamic]pos, grid: ^[][]rune, n_columns: int, n_rows: int, start_node: pos, end_node: pos) {
+	for step in steps {
+		grid[step.y][step.x] = '#'
+		exit_reached, steps_taken := bfs_path_search(grid, n_columns, n_rows, start_node, end_node)
+		if !exit_reached {
+			log.infof("Part 2: Failed to reach exit, caused by byte %i,%i", step.x, step.y)
+			break
+		}
+	}
+}
+
+bfs_path_search :: proc(grid: ^[][]rune, n_columns: int, n_rows: int, start_node: pos, end_node: pos) -> (bool, int) {
 	
 	R := n_rows // R = number of rows
 	C := n_columns // C = number of columns
@@ -248,7 +247,6 @@ solve_1 :: proc(grid: ^[][]rune, n_columns: int, n_rows: int, start_node: pos, e
 			nodes_in_next_layer += 1
 		}
 
-
 		nodes_left_in_layer -= 1
 		if nodes_left_in_layer == 0 {
 			nodes_left_in_layer = nodes_in_next_layer
@@ -257,28 +255,7 @@ solve_1 :: proc(grid: ^[][]rune, n_columns: int, n_rows: int, start_node: pos, e
 		}
 	}
 
-
-	for row, row_i in grid {
-		for col, col_i in row {
-			if visited[pos{col_i, row_i}] {
-				fmt.print("o")
-			} else {
-				fmt.print(col)
-			}
-		}
-		fmt.print("\n")
-	}
-	if reached_end {
-		log.infof("Shortest path found in %d steps", moves_count)
-	} else {
-		log.info("No path found to the end node")
-	}
-	// log.info("Sum of all boxes GPS coordinates is TBD")
-}
-
-
-solve_2 :: proc() {
-	// TBD
+	return reached_end, moves_count
 }
 
 
