@@ -1,4 +1,4 @@
-package aoc_2024_17
+package aoc_2024_18
 
 import "core:fmt"
 import "core:log"
